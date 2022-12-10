@@ -1,8 +1,4 @@
 ﻿
-using System.Security.Cryptography;
-
-
-
 List<int> targets = new List<int>{ 20, 60, 100, 140, 180, 220};
 
 void printState(int cycle, int register)

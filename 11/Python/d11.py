@@ -1,8 +1,7 @@
-from math import gcd
 
 def getmonkeystartstate():
 
-    with open('input.txt') as f:
+    with open('test.txt') as f:
         lines = f.readlines()
         
     monkeys = []
@@ -66,7 +65,7 @@ def getmonkeystartstate():
 
 
 
-def inspect(monkeys):
+def inspect(monkeys, lcm):
 
     for monkey in monkeys:
 
@@ -74,30 +73,33 @@ def inspect(monkeys):
 
             monkey.inspectioncount += 1
 
-            item = monkey.items.pop(0)
+            worry = monkey.items.pop(0) 
 
-            global lcm
 
             if monkey.operation == "add":
-                item += monkey.operationarg
+                worry += monkey.operationarg
 
             elif monkey.operation == "times":
-                item *= monkey.operationarg
+                worry *= monkey.operationarg
 
             elif monkey.operation == "square":
-                item *= item
+                worry *= worry
+
 
             global part
 
             if part == 1:
-                item //= 3
-
-
-            
-            if item % monkey.testnum == 0:
-                monkeys[monkey.truetarget].items.append(item)
+                worry = worry // 3 
             else:
-                monkeys[monkey.falsetarget].items.append(item)
+                worry = worry // 1
+
+
+            worry %= lcm
+            
+            if worry % monkey.testnum == 0:
+                monkeys[monkey.truetarget].items.append(worry)
+            else:
+                monkeys[monkey.falsetarget].items.append(worry)
 
             
 monkeys = getmonkeystartstate()
@@ -120,6 +122,7 @@ for monkey in monkeys:
 
 
 print(testnumarray)
+
 from math import gcd
 lcm = 1
 for i in testnumarray:
@@ -127,12 +130,11 @@ for i in testnumarray:
 print(lcm)
 
 
-
 print("p1")
 part = 1
 
 for i in range(20):
-    inspect(monkeys)
+    inspect(monkeys, lcm)
 
 
 inspectioncounts = []
@@ -144,13 +146,12 @@ for monkey in monkeys:
 inspectioncounts.sort()
 print(f"top 2 product: {inspectioncounts[-1]} * {inspectioncounts[-2]} = {inspectioncounts[-1]*inspectioncounts[-2]}")
 
-'''
 
 print("p2")
 part = 2
 
 for i in range(10000):
-    inspect(monkeys)
+    inspect(monkeys, lcm)
 
 
 inspectioncounts = []
@@ -161,4 +162,3 @@ for monkey in monkeys:
 
 inspectioncounts.sort()
 print(f"top 2 product: {inspectioncounts[-1]} * {inspectioncounts[-2]} = {inspectioncounts[-1]*inspectioncounts[-2]}")
-'''

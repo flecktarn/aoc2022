@@ -1,5 +1,11 @@
 ﻿
+using System.Drawing;
+
+Random random = new Random();
+
 List<int> targets = new List<int>{ 20, 60, 100, 140, 180, 220};
+
+List <ConsoleColor> colors = new List<ConsoleColor> { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Magenta, ConsoleColor.Yellow };
 
 void printState(int cycle, int register)
 {
@@ -8,11 +14,15 @@ void printState(int cycle, int register)
 
 void printCurrentPixel(int cycle, int register)
 {
-    int pixelPosition = (cycle) % 40;
+
+
+    int pixelPosition = ((cycle - 1) % 40) + 1;
+
+    Console.ForegroundColor = colors[(pixelPosition/5) % colors.Count];
 
     if(pixelPosition == 1)
     {
-        Console.Write('\n');
+        Console.Write("\n    ");
     }
     else if(pixelPosition % 5 == 0)
     {
@@ -100,9 +110,22 @@ void Solve(int part)
 
 
 //part 1
-Solve(1);
+//Solve(1);
+
 
 //part 2
-Solve(2);
+
+Console.CursorVisible = false;
+
+while(true){
+    Thread.Sleep(200);
+    ConsoleColor first = colors[0];
+    colors.RemoveAt(0);
+    colors.Add(first);
+    Console.CursorLeft = 0;
+    Console.CursorTop = 0;
+    Solve(2);
+}
+
 
 Console.ReadKey();

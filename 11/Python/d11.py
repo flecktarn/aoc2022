@@ -94,7 +94,7 @@ def inspect(monkeys, lcm):
                 worry = worry // 1
 
 
-            worry %= lcm
+            worry %= (23 * 19 * 13 * 17)
             
             if worry % monkey.testnum == 0:
                 monkeys[monkey.truetarget].items.append(worry)

@@ -1,25 +1,22 @@
 import time
+from copy import deepcopy
 
-file = open('test.txt','r')
+file = open('input.txt','r')
 
 lines = file.readlines()
 
     
-def compare(left, right):
-
-
-    print(f"- Compare {left} vs {right}")
-
+def compare(leftarray, rightarray):
+    left = deepcopy(leftarray)
+    right = deepcopy(rightarray)
 
     #if left and right are ints, just do the standard comparison
     if isinstance(left,int) and isinstance(right,int):
 
         if right < left:
-            print(f"Right is smaller, so inputs are in the WRONG order.")
             return -1 
 
         elif left < right:
-            print(f"Left is smaller, so inputs are in the RIGHT order.")
             return 1
         
         else:
@@ -30,13 +27,9 @@ def compare(left, right):
         
         if isinstance(left, int):
             left = [left]
-            print(f"- Compare {left} vs {right}")
-            print(f"- Mixed types; convert left to {left} and retry comparison")
 
         if isinstance(right, int):
             right = [right]
-            print(f"- Compare {left} vs {right}")
-            print(f"- Mixed types; convert right to {right} and retry comparison")
 
 
         while True:
@@ -45,11 +38,9 @@ def compare(left, right):
                 return 0
 
             if len(left) == 0:
-                print(f"- Left ran out of items, so inputs are in the RIGHT order.")
                 return 1
 
             if len(right) == 0:
-                print(f"- Right ran out of items, so inputs are in the WRONG order.")
                 return -1
             
             leftfirst = left.pop(0)
@@ -67,7 +58,7 @@ def compare(left, right):
 
 
     
-p1arrays = []
+arrays = []
 
 for index,line in enumerate(lines):
     if line.strip():
@@ -99,22 +90,19 @@ for index,line in enumerate(lines):
                 current_item = ancestors.pop()
 
 
-        p1arrays.append(current_item)
+        arrays.append(current_item)
 
 
 
-from copy import deepcopy
 
-p2arrays = deepcopy(p1arrays)
+p2arrays = deepcopy(arrays)
 
 rightitems = []
 
-for i in range(0, len(p1arrays),2):
-    leftside = p1arrays[i]
-    rightside = p1arrays[i+1]
+for i in range(0, len(arrays),2):
+    leftside = arrays[i]
+    rightside = arrays[i+1]
     pairnumber = i // 2 + 1
-    print(f"\n== Pair {pairnumber} ==")
-
     if compare(leftside,rightside) == 1:
         rightitems.append(pairnumber)
 
@@ -122,11 +110,40 @@ for i in range(0, len(p1arrays),2):
 
 
     
-print(f"right orders : {rightitems}")
+print(f"incides in the right order: {rightitems}")
 print(f"sum: {sum(rightitems)}")
 
 import functools
 
 
-for array in p2arrays:
+key1 = [[2]]
+key2 = [[6]]
+
+arrays.append(key1)
+arrays.append(key2)
+
+sortedarrays = sorted(arrays, key=functools.cmp_to_key(compare))
+
+'''
+for array in sortedarrays:
     print(array)
+'''
+
+sortedarrays = sortedarrays[::-1]
+
+k1i = 0
+k2i = 0
+
+for i in range(len(sortedarrays)):
+    if sortedarrays[i] == key1:
+        print(f"key1: {i}")
+        k1i = i+1
+
+
+    if sortedarrays[i] == key2:
+        print(f"key2: {i}")
+        k2i = i+1
+
+print(f'Decoder key: {k1i * k2i}')
+
+
